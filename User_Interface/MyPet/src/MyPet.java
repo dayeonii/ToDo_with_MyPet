@@ -72,6 +72,7 @@ public class MyPet extends JFrame {
         gbc.gridwidth=2;
         jpCenter.add(catLabel, gbc);    gbc.gridy++;
 
+        gbc.insets = new Insets(30,30,0,0);
         //아이템
         JPanel itemPanel = new JPanel(new FlowLayout());
         itemPanel.setBackground(Color.WHITE);
@@ -99,6 +100,16 @@ public class MyPet extends JFrame {
         itemPanel.add(toyCount);
 
         jpCenter.add(itemPanel, gbc);   gbc.gridy++;
+
+        //좋아요 버튼
+        JPanel likeP = new JPanel();
+        likeP.setBackground(Color.WHITE);
+        ImageIcon likeIcon = new ImageIcon("images/likeIcon.png");
+        Image likeImg = likeIcon.getImage().getScaledInstance(25,25,Image.SCALE_SMOOTH);
+        JLabel likeLabel = new JLabel(new ImageIcon(likeImg));
+        JTextField likeCount = new JTextField("5");
+        likeP.add(likeLabel);   likeP.add(likeCount);
+        jpCenter.add(likeP, gbc);   gbc.gridy++;
 
         //버튼
         JPanel jpSouth = new JPanel();

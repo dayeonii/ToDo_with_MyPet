@@ -1,7 +1,6 @@
 //메인화면, 투두리스트
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowStateListener;
 
 public class ToDoList extends JFrame {
     public ToDoList() {
@@ -75,12 +74,36 @@ public class ToDoList extends JFrame {
 
         //투두
         gbc.anchor = GridBagConstraints.WEST;
+        JPanel firstP = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc2 = new GridBagConstraints();
+        gbc2.gridx = 0;     gbc2.gridy =0;
+        gbc2.anchor = GridBagConstraints.WEST;
         JCheckBox first = new JCheckBox("소설 과제하기");
-        jpCenter.add(first, gbc);       gbc.gridy++;
-        JCheckBox second = new JCheckBox("교수님께 메일 보내기");
-        jpCenter.add(second, gbc);      gbc.gridy++;
-        JCheckBox third = new JCheckBox("방 청소하기");
-        jpCenter.add(third, gbc);      gbc.gridy++;
+        firstP.add(first, gbc2);     gbc2.gridx++;
+        gbc2.anchor = GridBagConstraints.EAST;
+        JButton firstBT = new JButton("-");
+        firstP.add(firstBT, gbc2);  gbc2.gridy++;   gbc2.gridx=0;
+        jpCenter.add(firstP, gbc);      gbc.gridy++;
+
+        JPanel secondP = new JPanel(new GridBagLayout());
+        gbc2.gridx = 0;     gbc2.gridy =0;
+        gbc2.anchor = GridBagConstraints.WEST;
+        JCheckBox second = new JCheckBox("소설 과제하기");
+        secondP.add(second, gbc2);     gbc2.gridx++;
+        gbc2.anchor = GridBagConstraints.EAST;
+        JButton secondBT = new JButton("-");
+        secondP.add(secondBT, gbc2);  gbc2.gridy++;   gbc2.gridx=0;
+        jpCenter.add(secondP, gbc);      gbc.gridy++;
+
+        JPanel thirdP = new JPanel(new GridBagLayout());
+        gbc2.gridx = 0;     gbc2.gridy =0;
+        gbc2.anchor = GridBagConstraints.WEST;
+        JCheckBox third = new JCheckBox("소설 과제하기");
+        thirdP.add(third, gbc2);     gbc2.gridx++;
+        gbc2.anchor = GridBagConstraints.EAST;
+        JButton thirdBT = new JButton("-");
+        thirdP.add(thirdBT, gbc2);  gbc2.gridy++;   gbc2.gridx=0;
+        jpCenter.add(thirdP, gbc);      gbc.gridy++;
 
         //달성률
         JPanel jpSouth = new JPanel();
@@ -103,6 +126,6 @@ public class ToDoList extends JFrame {
     }
 
     public static void main(String[] args) {
-        new ToDoList();
+        new PhotoPopup();
     }
 }
