@@ -30,6 +30,14 @@ public class Friends extends JFrame {
         jpNorth.add(menuBT, BorderLayout.WEST);
         jpNorth.setBorder(BorderFactory.createEmptyBorder(6,5,5,5));
 
+        //우측 상단 친구 추가 버튼
+        ImageIcon requestIcon = new ImageIcon("images/requestIcon.png");
+        img = requestIcon.getImage();
+        newimg = img.getScaledInstance(20,20,Image.SCALE_SMOOTH);
+        requestIcon = new ImageIcon(newimg);
+        JButton requestBT = new JButton(requestIcon);
+        jpNorth.add(requestBT, BorderLayout.EAST);
+
         //검색창
         JPanel jpCenter = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -71,6 +79,6 @@ public class Friends extends JFrame {
     }
 
     public static void main(String[] args) {
-        new Friends();
+        new Request();
     }
 }
