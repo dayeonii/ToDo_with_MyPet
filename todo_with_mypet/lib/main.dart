@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:todo_with_mypet/screens/todo_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
+import 'screens/todo_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,6 +18,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
+        '/todo': (context) => ToDoScreen(),
       },
     );
   }

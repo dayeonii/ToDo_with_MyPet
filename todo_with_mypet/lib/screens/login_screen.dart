@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_with_mypet/screens/todo_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -54,7 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: EdgeInsets.all(15),
                 child: ElevatedButton(
                   child: const Text('login'),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ToDoScreen()));
+                  },
                 ),
               ),
               Padding(
