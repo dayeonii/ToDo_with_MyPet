@@ -16,61 +16,127 @@ class _MyPetScreenState extends State<MyPetScreen> {
     return Scaffold(
       drawer: NavigationScreen(),
       appBar: AppBar(
-          title: Text('My Pet'),
+        title: Text('My Pet'),
         actions: [
-          ElevatedButton(onPressed: (){
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ToDoScreen()));
-          }, child: Text('ToDo'))
+          ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => ToDoScreen()));
+              },
+              child: Text('ToDo'))
         ],
       ),
       body: Center(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(20,15,20,15),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('배고픔'),
-                        LinearProgressIndicator(
-                          //padding: EdgeInsets.zero,
-                          value: 0.5,
-                        ),
-                        SizedBox(height: 10), // 이미지와 프로그레스 바 간격
-                        Image.asset('assets/images/catImage.png', width: 50, height: 50), // 적절한 이미지 위치 및 크기 설정
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 10),  // 간격
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('심심함'),
-                        LinearProgressIndicator(
-                          //padding: EdgeInsets.zero,
-                          value: 0.7,
-                        ),
-                        SizedBox(height: 10), // 이미지와 프로그레스 바 간격
-                        Image.asset('assets/images/catImage.png', width: 50, height: 50), // 적절한 이미지 위치 및 크기 설정
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-                padding: EdgeInsets.all(15),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(10),
                 child: Row(
-
+                  children: <Widget>[
+                    Text(
+                      '배고픔',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: LinearProgressIndicator(
+                        value: 0.5,
+                      ),
+                    ),
+                  ],
                 ),
-            ),
-          ],
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      '심심함',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: LinearProgressIndicator(
+                        value: 0.7,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(80),
+                child: Image.asset('assets/images/catImage.png'),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(100, 30, 100, 20),
+                child: Row(
+                  children: <Widget>[
+                    Image.asset('assets/images/foodImage.png',
+                        width: 40, height: 40, fit: BoxFit.cover),
+                    SizedBox(width: 15),
+                    Text(
+                      '5',
+                      style: TextStyle(fontSize: 25),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Image.asset('assets/images/toyImage.png',
+                        width: 40, height: 40, fit: BoxFit.cover),
+                    SizedBox(width: 15),
+                    Text(
+                      '7',
+                      style: TextStyle(fontSize: 25),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(100, 20, 100, 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Image.asset(
+                        'assets/images/likeIcon.png',
+                        width: 30,
+                        height: 30,
+                      ),
+                      iconSize: 30,
+                    ),
+                    Text(
+                      '12',
+                      style: TextStyle(fontSize: 25),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    OutlinedButton(
+                      onPressed: () {},
+                      child: Text('먹이주기', style: TextStyle(fontSize: 25),),
+                      style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: Colors.grey, width: 2)),
+                    ),
+                    SizedBox(width: 20),
+                    OutlinedButton(
+                      onPressed: () {},
+                      child: Text('놀아주기', style: TextStyle(fontSize: 25),),
+                      style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: Colors.grey, width: 2)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

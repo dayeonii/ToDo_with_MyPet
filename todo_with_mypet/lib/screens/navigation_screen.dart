@@ -32,7 +32,7 @@ class NavigationScreen extends StatelessWidget {
           ListTile(
             title: Text('Friends'),
             onTap: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                   context, MaterialPageRoute(builder: (context) => FriendScreen()));
             },
           ),
