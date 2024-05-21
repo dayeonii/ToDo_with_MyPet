@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todo_with_mypet/screens/friends_screen.dart';
+import 'package:todo_with_mypet/screens/navigation_screen.dart';
+import 'package:todo_with_mypet/screens/pet_screen.dart';
 
 class ToDoScreen extends StatefulWidget {
   @override
@@ -11,7 +14,17 @@ class _ToDoScreenState extends State<ToDoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('To-Do List'),),
+      drawer: NavigationScreen(),
+      appBar: AppBar(
+        title: Text('To-Do List'),
+        centerTitle: true,
+        //leading: ElevatedButton(onPressed: (){}, child: Text('Menu')),
+        actions: [
+          ElevatedButton(onPressed: (){
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyPetScreen()));
+          }, child: Text('Pet'))
+        ],
+      ),
       body: Center(
         child: Column(
           children: <Widget>[
@@ -44,7 +57,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
             ),
           ],
         )
-      )
+      ),
+
     );
   }
 }
