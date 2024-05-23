@@ -14,6 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('To-Do with My Pet'),
+        centerTitle: true,
       ),
       body: Container(
         child: Center(

@@ -17,6 +17,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
       drawer: NavigationScreen(),
       appBar: AppBar(
         title: Text('My Pet'),
+        centerTitle: true,
         actions: [
           ElevatedButton(
               onPressed: () {
@@ -66,13 +67,16 @@ class _MyPetScreenState extends State<MyPetScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(80),
-                child: Image.asset('assets/images/catImage.png'),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(60),
+                  child: Image.asset('assets/images/catImage.png'),
+                ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(100, 30, 100, 20),
+                padding: EdgeInsets.symmetric(vertical: 20),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Image.asset('assets/images/foodImage.png',
                         width: 40, height: 40, fit: BoxFit.cover),
@@ -81,9 +85,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
                       '5',
                       style: TextStyle(fontSize: 25),
                     ),
-                    SizedBox(
-                      width: 20,
-                    ),
+                    SizedBox(width: 40), // 간격 조절을 위해 SizedBox 사용
                     Image.asset('assets/images/toyImage.png',
                         width: 40, height: 40, fit: BoxFit.cover),
                     SizedBox(width: 15),
@@ -95,17 +97,14 @@ class _MyPetScreenState extends State<MyPetScreen> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(100, 20, 100, 20),
+                padding: EdgeInsets.symmetric(vertical: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
                       onPressed: () {},
                       icon: Image.asset(
-                        'assets/images/likeIcon.png',
-                        width: 30,
-                        height: 30,
-                      ),
+                        'assets/images/likeIcon.png', width: 30, height: 30,),
                       iconSize: 30,
                     ),
                     Text(
@@ -115,20 +114,21 @@ class _MyPetScreenState extends State<MyPetScreen> {
                   ],
                 ),
               ),
-              Expanded(
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     OutlinedButton(
                       onPressed: () {},
-                      child: Text('먹이주기', style: TextStyle(fontSize: 25),),
+                      child: Text('먹이주기', style: TextStyle(fontSize: 25)),
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(color: Colors.grey, width: 2)),
                     ),
                     SizedBox(width: 20),
                     OutlinedButton(
                       onPressed: () {},
-                      child: Text('놀아주기', style: TextStyle(fontSize: 25),),
+                      child: Text('놀아주기', style: TextStyle(fontSize: 25)),
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(color: Colors.grey, width: 2)),
                     ),

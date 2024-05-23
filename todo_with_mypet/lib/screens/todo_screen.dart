@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_with_mypet/screens/friends_screen.dart';
 import 'package:todo_with_mypet/screens/navigation_screen.dart';
@@ -55,6 +56,16 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 ],
               ),
             ),
+            Padding(padding: EdgeInsets.all(20),
+              child: LinearProgressIndicator(
+                value: 0.5,
+              ),
+            ),
+            Padding(padding: EdgeInsets.all(20),
+            child: ElevatedButton(
+              onPressed: () {},
+              child: Text('아이템 받기', style: TextStyle(fontSize: 20),),
+            ),)
           ],
         )
       ),
