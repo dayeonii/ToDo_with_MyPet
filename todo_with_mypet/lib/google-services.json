@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "821156809211",
+    "project_id": "todo-with-mypet",
+    "storage_bucket": "todo-with-mypet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:821156809211:android:1aba2126d996cf5edea35e",
+        "android_client_info": {
+          "package_name": "com.example.todo_with_mypet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwruiLaHBK_e1np6gWKTO1lrw1q4TmaME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
