@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "584405097549",
+    "project_id": "todopet-88325",
+    "storage_bucket": "todopet-88325.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584405097549:android:eb46778fb85d8ebebe9004",
+        "android_client_info": {
+          "package_name": "com.example.todo_pet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqH6DJZurloilGF85sAR-bu7-Bz8jPcpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
