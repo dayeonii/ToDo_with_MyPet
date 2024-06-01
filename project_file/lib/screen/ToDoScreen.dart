@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todo_pet/screen/pet.dart';
-import 'package:todo_pet/screen/navigation.dart';
+import 'package:todo_pet/screen/PetScreen.dart';
+import 'package:todo_pet/screen/NavigationScreen.dart';
 
 class ToDoScreen extends StatefulWidget {
   @override

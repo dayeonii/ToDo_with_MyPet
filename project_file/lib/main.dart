@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:todo_pet/screen/login.dart';
-import 'package:todo_pet/screen/register.dart';
-import 'package:todo_pet/screen/todo.dart';
-import 'package:todo_pet/screen/pet.dart';
+import 'package:todo_pet/screen/LoginScreen.dart';
+import 'package:todo_pet/screen/RegisterScreen.dart';
+import 'package:todo_pet/screen/ToDoScreen.dart';
+import 'package:todo_pet/screen/PetScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

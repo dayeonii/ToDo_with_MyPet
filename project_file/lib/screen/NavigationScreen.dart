@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_pet/screen/todo.dart';
-import 'package:todo_pet/screen/friend.dart';
-import 'package:todo_pet/screen/pet.dart';
+import 'package:todo_pet/screen/ToDoScreen.dart';
+import 'package:todo_pet/screen/FriendScreen.dart';
+import 'package:todo_pet/screen/PetScreen.dart';
 
 class NavigationScreen extends StatelessWidget {
   @override

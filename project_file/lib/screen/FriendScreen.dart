@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_pet/screen/request.dart';
-import 'package:todo_pet/screen/navigation.dart';
+import 'package:todo_pet/screen/RequestScreen.dart';
+import 'package:todo_pet/screen/NavigationScreen.dart';
 
 class FriendScreen extends StatefulWidget {
   @override
