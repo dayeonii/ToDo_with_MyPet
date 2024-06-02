@@ -81,7 +81,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
             Padding(
               padding: EdgeInsets.all(20),
               child: LinearProgressIndicator(
-                value: 0.5,
+                value: _toDoManager.progressRate / 100,
               ),
             ),
             Padding(
