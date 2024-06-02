@@ -105,7 +105,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
         children: [
           IconButton(
             onPressed: () async {
-              await _toDoManager.completeToDo(doc['id']);
+              //await _toDoManager.completeToDo(doc['id']);
+              _toDoManager.checkToDo(doc['id'], context);
               setState(() {}); // 화면을 업데이트하여 변경사항 반영
             },
             icon: Icon(

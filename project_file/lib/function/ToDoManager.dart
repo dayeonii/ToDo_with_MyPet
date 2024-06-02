@@ -22,9 +22,9 @@ class ToDoManager {
         'timestamp': doc['timestamp']
       }).toList();
       _renewProgressRate();
-      print('Loaded ${todoList.length} todos');
+      //print('Loaded ${todoList.length} todos');
     } catch (e) {
-      print('Error loading todos: $e');
+      //print('Error loading todos: $e');
     }
   }
 
@@ -45,9 +45,9 @@ class ToDoManager {
       newToDo['id'] = docRef.id;
       todoList.add(newToDo);
       _renewProgressRate();
-      print('Added todo: $title');
+      //print('Added todo: $title');
     } catch (e) {
-      print('Error adding todo: $e');
+      //print('Error adding todo: $e');
     }
   }
 
@@ -56,9 +56,9 @@ class ToDoManager {
       await _firestore.collection('todos').doc(id).delete();
       todoList.removeWhere((todo) => todo['id'] == id);
       _renewProgressRate();
-      print('Deleted todo with id: $id');
+      //print('Deleted todo with id: $id');
     } catch (e) {
-      print('Error deleting todo: $e');
+      //print('Error deleting todo: $e');
     }
   }
 
@@ -70,9 +70,9 @@ class ToDoManager {
         todoList[index]['isCompleted'] = true;
       }
       _renewProgressRate();
-      print('Completed todo with id: $id');
+      //print('Completed todo with id: $id');
     } catch (e) {
-      print('Error completing todo: $e');
+      //print('Error completing todo: $e');
     }
   }
 
