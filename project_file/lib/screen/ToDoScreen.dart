@@ -13,29 +13,7 @@ class ToDoScreen extends StatefulWidget {
 
 class _ToDoScreenState extends State<ToDoScreen> {
   final TextEditingController _todoController = TextEditingController();
-  // final CollectionReference _todos = FirebaseFirestore.instance.collection('todos');
   final ToDoManager _toDoManager = ToDoManager();
-
-  /*
-  Future<void> _addTodo() async {
-    if (_todoController.text.isNotEmpty) {
-      await _todos.add({
-        'title': _todoController.text,
-        'done': false,
-        'timestamp': Timestamp.now(),
-      });
-      _todoController.clear();
-    }
-  }
-
-  Future<void> _deleteTodo(String id) async {
-    await _todos.doc(id).delete();
-  }
-
-  Future<void> _toggleTodoDone(DocumentSnapshot doc) async {
-    await _todos.doc(doc.id).update({'done': !doc['done']});
-  }
-  */
 
   @override
   Widget build(BuildContext context) {
@@ -80,15 +58,21 @@ class _ToDoScreenState extends State<ToDoScreen> {
               child: FutureBuilder<List<Map<String, dynamic>>>(
                 future: _toDoManager.getToDoList(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    print('Error loading todos: ${snapshot.error}');
+                    return Center(child: Text('Error loading todos'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(child: Text('No todos available'));
                   }
+
                   final todoList = snapshot.data!;
                   return ListView.builder(
                     itemCount: todoList.length,
-                    itemBuilder: (context,index) {
-                      final dox = todoList[index];
-                      return _buildToDoList(dox);
+                    itemBuilder: (context, index) {
+                      final doc = todoList[index];
+                      return _buildToDoList(doc);
                     },
                   );
                 },
@@ -113,7 +97,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
     );
   }
 
-
   Widget _buildToDoList(Map<String, dynamic> doc) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 15.0),
@@ -121,15 +104,20 @@ class _ToDoScreenState extends State<ToDoScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            onPressed: () => _toDoManager.completeToDo(doc['id']),
+            onPressed: () async {
+              await _toDoManager.completeToDo(doc['id']);
+              setState(() {}); // 화면을 업데이트하여 변경사항 반영
+            },
             icon: Icon(
-              //doc['done'] ? Icons.check_box : Icons.check_box_outline_blank,
-                (doc['done'] ?? false) ? Icons.check_box : Icons.check_box_outline_blank, //null처리 추가
+              (doc['isCompleted'] ?? false) ? Icons.check_box : Icons.check_box_outline_blank,
             ),
           ),
           Text(doc['title'], style: TextStyle(fontSize: 20)),
           ElevatedButton(
-            onPressed: () => _toDoManager.deleteToDo(doc['id']),
+            onPressed: () async {
+              await _toDoManager.deleteToDo(doc['id']);
+              setState(() {}); // 화면을 업데이트하여 변경사항 반영
+            },
             child: Text('-', style: TextStyle(fontSize: 30)),
           ),
         ],
@@ -155,9 +143,10 @@ class _ToDoScreenState extends State<ToDoScreen> {
               child: Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                _toDoManager.addToDo(_todoController.text);
+              onPressed: () async {
+                await _toDoManager.addToDo(_todoController.text);
                 Navigator.of(context).pop();
+                setState(() {}); // 화면을 업데이트하여 변경사항 반영
               },
               child: Text('Add'),
             ),
