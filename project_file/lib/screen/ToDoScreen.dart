@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todo_pet/screen/PetScreen.dart';
 import 'package:todo_pet/screen/NavigationScreen.dart';
+import 'package:todo_pet/function/ToDoManager.dart';
 
 class ToDoScreen extends StatefulWidget {
   @override
@@ -12,8 +13,10 @@ class ToDoScreen extends StatefulWidget {
 
 class _ToDoScreenState extends State<ToDoScreen> {
   final TextEditingController _todoController = TextEditingController();
-  final CollectionReference _todos = FirebaseFirestore.instance.collection('todos');
+  // final CollectionReference _todos = FirebaseFirestore.instance.collection('todos');
+  final ToDoManager _toDoManager = ToDoManager();
 
+  /*
   Future<void> _addTodo() async {
     if (_todoController.text.isNotEmpty) {
       await _todos.add({
@@ -32,6 +35,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
   Future<void> _toggleTodoDone(DocumentSnapshot doc) async {
     await _todos.doc(doc.id).update({'done': !doc['done']});
   }
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -73,16 +77,19 @@ class _ToDoScreenState extends State<ToDoScreen> {
               color: Colors.black,
             ),
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: _todos.orderBy('timestamp', descending: true).snapshots(),
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: _toDoManager.getToDoList(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(child: CircularProgressIndicator());
                   }
-                  return ListView(
-                    children: snapshot.data!.docs.map((doc) {
-                      return _buildToDoList(doc);
-                    }).toList(),
+                  final todoList = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: todoList.length,
+                    itemBuilder: (context,index) {
+                      final dox = todoList[index];
+                      return _buildToDoList(dox);
+                    },
                   );
                 },
               ),
@@ -106,21 +113,23 @@ class _ToDoScreenState extends State<ToDoScreen> {
     );
   }
 
-  Widget _buildToDoList(DocumentSnapshot doc) {
+
+  Widget _buildToDoList(Map<String, dynamic> doc) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 15.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            onPressed: () => _toggleTodoDone(doc),
+            onPressed: () => _toDoManager.completeToDo(doc['id']),
             icon: Icon(
-              doc['done'] ? Icons.check_box : Icons.check_box_outline_blank,
+              //doc['done'] ? Icons.check_box : Icons.check_box_outline_blank,
+                (doc['done'] ?? false) ? Icons.check_box : Icons.check_box_outline_blank, //null처리 추가
             ),
           ),
           Text(doc['title'], style: TextStyle(fontSize: 20)),
           ElevatedButton(
-            onPressed: () => _deleteTodo(doc.id),
+            onPressed: () => _toDoManager.deleteToDo(doc['id']),
             child: Text('-', style: TextStyle(fontSize: 30)),
           ),
         ],
@@ -147,7 +156,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
             ),
             TextButton(
               onPressed: () {
-                _addTodo();
+                _toDoManager.addToDo(_todoController.text);
                 Navigator.of(context).pop();
               },
               child: Text('Add'),

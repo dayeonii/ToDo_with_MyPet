@@ -62,7 +62,7 @@ flutter {
     source '../..'
 }
 
-//윈도우에서 에러 때문에 추가
+//윈도우에서 에러 때문에 추가 (맥에서도 안돼...)
 dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
 }
