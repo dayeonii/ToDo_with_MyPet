@@ -70,15 +70,17 @@ class ToDoManager {
         todoList[index]['isCompleted'] = true;
       }
       _renewProgressRate();
+
       //print('Completed todo with id: $id');
     } catch (e) {
       //print('Error completing todo: $e');
     }
   }
 
-  void checkToDo(String id, BuildContext context) {
+  void checkToDo(String id, BuildContext context, VoidCallback onComplete) {
     CheckToDo.showCheckToDoDialog(context, id, () async {
       await completeToDo(id);
+      onComplete();
     });
   }
 

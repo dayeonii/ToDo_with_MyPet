@@ -106,8 +106,10 @@ class _ToDoScreenState extends State<ToDoScreen> {
           IconButton(
             onPressed: () async {
               //await _toDoManager.completeToDo(doc['id']);
-              _toDoManager.checkToDo(doc['id'], context);
-              setState(() {}); // 화면을 업데이트하여 변경사항 반영
+              _toDoManager.checkToDo(doc['id'], context, () {
+                setState(() {});
+              });
+              // setState(() {}); // 화면을 업데이트하여 변경사항 반영
             },
             icon: Icon(
               (doc['isCompleted'] ?? false) ? Icons.check_box : Icons.check_box_outline_blank,

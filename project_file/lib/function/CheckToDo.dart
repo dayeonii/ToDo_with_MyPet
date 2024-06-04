@@ -66,15 +66,17 @@ class CheckToDo {
   // 사진을 Firebase Storage에 업로드하는 함수, url 저장
   Future<void> uploadPhoto(File file, String todoId) async {
     try {
-      final uploadTask = await _storage.ref('todos/$todoId/${DateTime.now().millisecondsSinceEpoch}.jpg').putFile(file);
-
-      //url 가져오기
-      final downloadUrl = await uploadTask.ref.getDownloadURL();
-
-      //url 업뎃
-      await _firestore.collection('todos').doc(todoId).update({
-        'imageUrl': downloadUrl,
-        'isCompleted': true,
+      // final uploadTask = await _storage.ref('todos/$todoId/${DateTime.now().millisecondsSinceEpoch}.jpg').putFile(file);
+      // final downloadUrl = await uploadTask.ref.getDownloadURL();
+      // await _firestore.collection('todos').doc(todoId).update({
+      //   'imageUrl': downloadUrl,
+      //   'isCompleted': true,
+      final ref = _storage.ref().child('todos').child(todoId).child('photo.jpg');
+      await ref.putFile(file);
+      final photoUrl = await ref.getDownloadURL();
+      // Firestore에 사진 URL 업데이트
+      await FirebaseFirestore.instance.collection('todos').doc(todoId).update({
+        'photoUrl': photoUrl,
       });
     } catch (e) {
       print('Failed to upload photo: $e');
