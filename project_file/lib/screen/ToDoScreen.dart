@@ -129,6 +129,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
   }
 
   void _addTodoDialog() {
+    _todoController.clear();  //입력할 때 마다 빈 칸으로 시작
+
     showDialog(
       context: context,
       builder: (context) {
