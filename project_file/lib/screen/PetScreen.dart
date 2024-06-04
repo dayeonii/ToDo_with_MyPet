@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:percent_indicator/percent_indicator.dart';
 import 'package:todo_pet/screen/ToDoScreen.dart';
 import 'package:todo_pet/screen/NavigationScreen.dart';
+import 'package:todo_pet/function/PetStatement.dart';
 
 class MyPetScreen extends StatefulWidget {
   @override

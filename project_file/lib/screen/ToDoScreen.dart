@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_pet/screen/PetScreen.dart';
 import 'package:todo_pet/screen/NavigationScreen.dart';
 import 'package:todo_pet/function/ToDoManager.dart';
@@ -14,6 +15,10 @@ class ToDoScreen extends StatefulWidget {
 class _ToDoScreenState extends State<ToDoScreen> {
   final TextEditingController _todoController = TextEditingController();
   final ToDoManager _toDoManager = ToDoManager();
+
+  //현재 시간
+  DateTime dt = DateTime.now();
+  List<String> weekdayList = ['MON','TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
               child: Row(
                 children: [
                   SizedBox(width: 30),
-                  Text('2024. 05. 24. FRI', style: TextStyle(fontSize: 30)),
+                  // Text('2024. 05. 24. FRI', style: TextStyle(fontSize: 30)),
+                  Text('${dt.year}. ${dt.month}. ${dt.day}. ${weekdayList[dt.weekday-1]}', style: TextStyle(fontSize: 30)),
                   SizedBox(width: 25),
                   ElevatedButton(
                     onPressed: _addTodoDialog,
