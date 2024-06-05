@@ -1,40 +1,44 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class PetStatement with ChangeNotifier {
-  double _hunger = 0.5;
-  double _boredom = 0.7;
-  int _foodCount = 5;
-  int _toyCount = 7;
-  int _likeCount = 12;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final String petID;
 
-  double get hunger => _hunger;
-  double get boredom => _boredom;
-  int get foodCount => _foodCount;
-  int get toyCount => _toyCount;
-  int get likeCount => _likeCount;
+  PetStatement(this.petID);
 
-  set hunger(double value) {
-    _hunger = value;
-    notifyListeners();
+  //초기값
+  Future<void> initPet() async {
+    DocumentReference petDoc = _firestore.collection('pet').doc(petID);
+    await petDoc.set({
+      'hungryLevel': 0,
+      'boredLevel': 0,
+    });
   }
 
-  set boredom(double value) {
-    _boredom = value;
-    notifyListeners();
+  //get
+  Future<int> getHungryLevel() async {
+    DocumentSnapshot petDoc =
+        await _firestore.collection('pet').doc(petID).get();
+    return petDoc['hungryLevel'];
   }
 
-  set foodCount(int value) {
-    _foodCount = value;
-    notifyListeners();
+  Future<int> getBoredLevel() async {
+    DocumentSnapshot petDoc =
+        await _firestore.collection('pet').doc(petID).get();
+    return petDoc['boredLevel'];
   }
 
-  set toyCount(int value) {
-    _toyCount = value;
-    notifyListeners();
+  //set
+  Future<void> setHungryLevel(int newValue) async {
+    await _firestore.collection('pet').doc(petID).update({
+      'hungryLevel': newValue,
+    });
   }
 
-  set likeCount(int value) {
-    _likeCount = value;
-    notifyListeners();
+  Future<void> setBoredLevel(int newValue) async {
+    await _firestore.collection('pet').doc(petID).update({
+      'boredLevel': newValue,
+    });
   }
 }

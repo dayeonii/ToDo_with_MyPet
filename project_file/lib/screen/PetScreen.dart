@@ -11,6 +11,32 @@ class MyPetScreen extends StatefulWidget {
 }
 
 class _MyPetScreenState extends State<MyPetScreen> {
+  final PetStatement _petStatement = PetStatement('petID');
+  double _hungryLevel = 0.0;
+  double _boredLevel = 0.0;
+
+  @override
+  void initState()  {
+    super.initState();
+    _initializePet();
+  }
+
+  Future<void> _initializePet() async {
+    await _petStatement.initPet();
+    _updateLevels();
+  }
+
+  Future<void> _updateLevels() async {
+    int hungryLevel = await _petStatement.getHungryLevel();
+    int boredLevel = await _petStatement.getBoredLevel();
+    setState(() {
+      _hungryLevel = hungryLevel / 100;
+      _boredLevel = boredLevel / 100;
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +69,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
                     SizedBox(width: 10),
                     Expanded(
                       child: LinearProgressIndicator(
-                        value: 0.5,
+                        value: _hungryLevel,
                       ),
                     ),
                   ],
@@ -61,7 +87,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
                     SizedBox(width: 10),
                     Expanded(
                       child: LinearProgressIndicator(
-                        value: 0.7,
+                        value: _boredLevel,
                       ),
                     ),
                   ],
