@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_pet/screen/ToDoScreen.dart';
 import 'package:todo_pet/screen/NavigationScreen.dart';
 import 'package:todo_pet/function/PetStatement.dart';
+import 'package:todo_pet/function/GetItem.dart';
 
 class MyPetScreen extends StatefulWidget {
   @override
@@ -15,6 +16,10 @@ class _MyPetScreenState extends State<MyPetScreen> {
   double _hungryLevel = 0.0;
   double _boredLevel = 0.0;
 
+  final GetItem _getItem = GetItem('userID');
+  int _foodItem = 0;
+  int _toyItem = 0;
+
   @override
   void initState()  {
     super.initState();
@@ -25,16 +30,23 @@ class _MyPetScreenState extends State<MyPetScreen> {
     await _petStatement.initPet();
     _updateLevels();
   }
+  Future<void> _initializeItem() async {
+    await _getItem.initItem();
+    _updateLevels();
+  }
 
   Future<void> _updateLevels() async {
     int hungryLevel = await _petStatement.getHungryLevel();
     int boredLevel = await _petStatement.getBoredLevel();
+    int foodItem = await _getItem.getFoodItem();
+    int toyItem = await _getItem.getToyItem();
     setState(() {
       _hungryLevel = hungryLevel / 100;
       _boredLevel = boredLevel / 100;
+      _foodItem = foodItem;
+      _toyItem = toyItem;
     });
   }
-
 
 
   @override
@@ -108,7 +120,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
                         width: 40, height: 40, fit: BoxFit.cover),
                     SizedBox(width: 15),
                     Text(
-                      '5',
+                      '${_foodItem}',
                       style: TextStyle(fontSize: 25),
                     ),
                     SizedBox(width: 40), // 간격 조절을 위해 SizedBox 사용
@@ -116,7 +128,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
                         width: 40, height: 40, fit: BoxFit.cover),
                     SizedBox(width: 15),
                     Text(
-                      '7',
+                      '${_toyItem}',
                       style: TextStyle(fontSize: 25),
                     ),
                   ],
