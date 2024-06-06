@@ -7,19 +7,21 @@ class GetItem {
 
   GetItem(this.userID);
 
-  //초기값
+  // 초기값
   Future<void> initItem() async {
     DocumentReference itemDoc = _firestore.collection('item').doc(userID);
     DocumentSnapshot docSnapshot = await itemDoc.get();
-    if(!docSnapshot.exists) {
+    if (!docSnapshot.exists) {
       await itemDoc.set({
         'foodItem': 0,
         'toyItem': 0,
+        'firstReceive': false,
+        'secondReceive': false,
       });
     }
   }
 
-  //get
+  // get
   Future<int> getFoodItem() async {
     DocumentSnapshot itemDoc =
     await _firestore.collection('item').doc(userID).get();
@@ -32,7 +34,19 @@ class GetItem {
     return itemDoc['toyItem'];
   }
 
-  //set
+  Future<bool> getFirstReceive() async {
+    DocumentSnapshot itemDoc =
+    await _firestore.collection('item').doc(userID).get();
+    return itemDoc['firstReceive'];
+  }
+
+  Future<bool> getSecondReceive() async {
+    DocumentSnapshot itemDoc =
+    await _firestore.collection('item').doc(userID).get();
+    return itemDoc['secondReceive'];
+  }
+
+  // set
   Future<void> setFoodItem(int newValue) async {
     await _firestore.collection('item').doc(userID).update({
       'foodItem': newValue,
@@ -45,17 +59,47 @@ class GetItem {
     });
   }
 
-  //receive
-  Future<void> receiveItem() async {
+  Future<void> setFirstReceive(bool value) async {
+    await _firestore.collection('item').doc(userID).update({
+      'firstReceive': value,
+    });
+  }
+
+  Future<void> setSecondReceive(bool value) async {
+    await _firestore.collection('item').doc(userID).update({
+      'secondReceive': value,
+    });
+  }
+
+  // receive
+  Future<void> receiveItem(double progressRate) async {
+    bool firstReceive = await getFirstReceive();
+    bool secondReceive = await getSecondReceive();
+
+    if (progressRate >= 50 && progressRate < 99 && !firstReceive) {
+      await _updateItem(3);
+      await setFirstReceive(true);
+    } else if (progressRate >= 99 && firstReceive && !secondReceive) {
+      await _updateItem(3);
+      await setSecondReceive(true);
+    }
+  }
+
+  Future<void> _updateItem(int increment) async {
     int currentFoodItem = await getFoodItem();
     int currentToyItem = await getToyItem();
 
-    int newFoodItem = currentFoodItem + 1;
-    int newToyItem = currentToyItem + 1;
-
     await _firestore.collection('item').doc(userID).update({
-      'foodItem': newFoodItem,
-      'toyItem': newToyItem,
+      'foodItem': currentFoodItem + increment,
+      'toyItem': currentToyItem + increment,
+    });
+  }
+
+  // reset receive status (for new day)
+  Future<void> resetReceiveStatus() async {
+    await _firestore.collection('item').doc(userID).update({
+      'firstReceive': false,
+      'secondReceive': false,
     });
   }
 }

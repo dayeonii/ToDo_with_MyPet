@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 import 'package:todo_pet/screen/PetScreen.dart';
 import 'package:todo_pet/screen/NavigationScreen.dart';
 import 'package:todo_pet/function/ToDoManager.dart';
@@ -18,9 +17,34 @@ class _ToDoScreenState extends State<ToDoScreen> {
   final ToDoManager _toDoManager = ToDoManager();
   final GetItem _getItem = GetItem('userID');
 
-  //현재 시간
   DateTime dt = DateTime.now();
   List<String> weekdayList = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+  double _progressRate = 0;
+  bool _firstReceive = false;
+  bool _secondReceive = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _getItem.initItem();
+    _loadProgressRate();
+  }
+
+  Future<void> _loadProgressRate() async {
+    double progressRate = await _toDoManager.calculateProgressRate();
+    bool firstReceive = await _getItem.getFirstReceive();
+    bool secondReceive = await _getItem.getSecondReceive();
+    setState(() {
+      _progressRate = progressRate;
+      _firstReceive = firstReceive;
+      _secondReceive = secondReceive;
+    });
+  }
+
+  Future<void> _receiveItem() async {
+    await _getItem.receiveItem(_progressRate);
+    await _loadProgressRate(); // Update progress and receive status
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,16 +118,15 @@ class _ToDoScreenState extends State<ToDoScreen> {
             Padding(
               padding: EdgeInsets.all(20),
               child: LinearProgressIndicator(
-                value: _toDoManager.progressRate / 100,
+                value: _progressRate / 100,
               ),
             ),
             Padding(
               padding: EdgeInsets.all(20),
               child: ElevatedButton(
-                onPressed: () async {
-                  await _getItem.receiveItem();
-                  setState(() {}); // Update the screen to reflect item changes
-                },
+                onPressed: (_progressRate >= 50 && !_firstReceive) || (_progressRate >= 99 && !_secondReceive)
+                    ? _receiveItem
+                    : null,
                 child: Text('아이템 받기', style: TextStyle(fontSize: 20)),
               ),
             ),
@@ -123,6 +146,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
             onPressed: () async {
               _toDoManager.checkToDo(doc['id'], context, () {
                 setState(() {});
+                _loadProgressRate();
               });
             },
             icon: Icon(
@@ -135,7 +159,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
           ElevatedButton(
             onPressed: () async {
               await _toDoManager.deleteToDo(doc['id']);
-              setState(() {}); // Update the screen to reflect deletion
+              setState(() {});
+              _loadProgressRate();
             },
             child: Text('-', style: TextStyle(fontSize: 30)),
           ),
@@ -145,7 +170,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
   }
 
   void _addTodoDialog() {
-    _todoController.clear(); //입력할 때 마다 빈 칸으로 시작
+    _todoController.clear();
 
     showDialog(
       context: context,
@@ -167,7 +192,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
               onPressed: () async {
                 await _toDoManager.addToDo(_todoController.text);
                 Navigator.of(context).pop();
-                setState(() {}); // Update the screen to reflect addition
+                setState(() {});
+                _loadProgressRate();
               },
               child: Text('Add'),
             ),

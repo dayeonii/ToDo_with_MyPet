@@ -92,4 +92,10 @@ class ToDoManager {
   Stream<QuerySnapshot> getTodosStream() {
     return _firestore.collection('todos').orderBy('timestamp', descending: true).snapshots();
   }
+
+  Future<double> calculateProgressRate() async {
+    await _loadToDos();
+    int completedCount = todoList.where((todo) => todo['isCompleted'] == true).length;
+    return todoList.isEmpty ? 0.0 : (completedCount / todoList.length) * 100;
+  }
 }
