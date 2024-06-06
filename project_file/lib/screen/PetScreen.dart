@@ -24,8 +24,9 @@ class _MyPetScreenState extends State<MyPetScreen> {
   void initState() {
     super.initState();
     _interactionPet = Interactionpet(_petStatement, _getItem);
-    _initializePet();
-    _initializeItem();
+    // _initializePet();
+    // _initializeItem();
+    _updateLevels();
   }
 
   Future<void> _initializePet() async {

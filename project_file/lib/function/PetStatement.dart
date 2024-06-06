@@ -10,10 +10,13 @@ class PetStatement with ChangeNotifier {
   //초기값
   Future<void> initPet() async {
     DocumentReference petDoc = _firestore.collection('pet').doc(petID);
-    await petDoc.set({
-      'hungryLevel': 0,
-      'boredLevel': 0,
-    });
+    DocumentSnapshot docSnapshot = await petDoc.get();
+    if(!docSnapshot.exists) {
+      await petDoc.set({
+        'hungryLevel': 0,
+        'boredLevel': 0,
+      });
+    }
   }
 
   //get
