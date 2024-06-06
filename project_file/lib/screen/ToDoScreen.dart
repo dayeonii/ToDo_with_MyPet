@@ -16,10 +16,11 @@ class ToDoScreen extends StatefulWidget {
 class _ToDoScreenState extends State<ToDoScreen> {
   final TextEditingController _todoController = TextEditingController();
   final ToDoManager _toDoManager = ToDoManager();
+  final GetItem _getItem = GetItem('userID');
 
   //현재 시간
   DateTime dt = DateTime.now();
-  List<String> weekdayList = ['MON','TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+  List<String> weekdayList = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,10 @@ class _ToDoScreenState extends State<ToDoScreen> {
         actions: [
           ElevatedButton(
             onPressed: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyPetScreen()));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MyPetScreen()),
+              );
             },
             child: Text('Pet'),
           ),
@@ -45,8 +49,10 @@ class _ToDoScreenState extends State<ToDoScreen> {
               child: Row(
                 children: [
                   SizedBox(width: 30),
-                  // Text('2024. 05. 24. FRI', style: TextStyle(fontSize: 30)),
-                  Text('${dt.year}. ${dt.month}. ${dt.day}. ${weekdayList[dt.weekday-1]}', style: TextStyle(fontSize: 30)),
+                  Text(
+                    '${dt.year}. ${dt.month}. ${dt.day}. ${weekdayList[dt.weekday - 1]}',
+                    style: TextStyle(fontSize: 30),
+                  ),
                   SizedBox(width: 25),
                   ElevatedButton(
                     onPressed: _addTodoDialog,
@@ -94,7 +100,10 @@ class _ToDoScreenState extends State<ToDoScreen> {
             Padding(
               padding: EdgeInsets.all(20),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await _getItem.receiveItem();
+                  setState(() {}); // Update the screen to reflect item changes
+                },
                 child: Text('아이템 받기', style: TextStyle(fontSize: 20)),
               ),
             ),
@@ -112,21 +121,21 @@ class _ToDoScreenState extends State<ToDoScreen> {
         children: [
           IconButton(
             onPressed: () async {
-              //await _toDoManager.completeToDo(doc['id']);
               _toDoManager.checkToDo(doc['id'], context, () {
                 setState(() {});
               });
-              // setState(() {}); // 화면을 업데이트하여 변경사항 반영
             },
             icon: Icon(
-              (doc['isCompleted'] ?? false) ? Icons.check_box : Icons.check_box_outline_blank,
+              (doc['isCompleted'] ?? false)
+                  ? Icons.check_box
+                  : Icons.check_box_outline_blank,
             ),
           ),
           Text(doc['title'], style: TextStyle(fontSize: 20)),
           ElevatedButton(
             onPressed: () async {
               await _toDoManager.deleteToDo(doc['id']);
-              setState(() {}); // 화면을 업데이트하여 변경사항 반영
+              setState(() {}); // Update the screen to reflect deletion
             },
             child: Text('-', style: TextStyle(fontSize: 30)),
           ),
@@ -136,7 +145,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
   }
 
   void _addTodoDialog() {
-    _todoController.clear();  //입력할 때 마다 빈 칸으로 시작
+    _todoController.clear(); //입력할 때 마다 빈 칸으로 시작
 
     showDialog(
       context: context,
@@ -158,7 +167,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
               onPressed: () async {
                 await _toDoManager.addToDo(_todoController.text);
                 Navigator.of(context).pop();
-                setState(() {}); // 화면을 업데이트하여 변경사항 반영
+                setState(() {}); // Update the screen to reflect addition
               },
               child: Text('Add'),
             ),

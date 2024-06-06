@@ -10,23 +10,26 @@ class GetItem {
   //초기값
   Future<void> initItem() async {
     DocumentReference itemDoc = _firestore.collection('item').doc(userID);
-    await itemDoc.set({
-      'foodItem': 0,
-      'toyItem': 0,
-    });
+    DocumentSnapshot docSnapshot = await itemDoc.get();
+    if(!docSnapshot.exists) {
+      await itemDoc.set({
+        'foodItem': 0,
+        'toyItem': 0,
+      });
+    }
   }
 
   //get
   Future<int> getFoodItem() async {
-    DocumentSnapshot petDoc =
+    DocumentSnapshot itemDoc =
     await _firestore.collection('item').doc(userID).get();
-    return petDoc['foodItem'];
+    return itemDoc['foodItem'];
   }
 
   Future<int> getToyItem() async {
-    DocumentSnapshot petDoc =
+    DocumentSnapshot itemDoc =
     await _firestore.collection('item').doc(userID).get();
-    return petDoc['toyItem'];
+    return itemDoc['toyItem'];
   }
 
   //set
@@ -39,6 +42,20 @@ class GetItem {
   Future<void> setToyItem(int newValue) async {
     await _firestore.collection('item').doc(userID).update({
       'toyItem': newValue,
+    });
+  }
+
+  //receive
+  Future<void> receiveItem() async {
+    int currentFoodItem = await getFoodItem();
+    int currentToyItem = await getToyItem();
+
+    int newFoodItem = currentFoodItem + 1;
+    int newToyItem = currentToyItem + 1;
+
+    await _firestore.collection('item').doc(userID).update({
+      'foodItem': newFoodItem,
+      'toyItem': newToyItem,
     });
   }
 }
