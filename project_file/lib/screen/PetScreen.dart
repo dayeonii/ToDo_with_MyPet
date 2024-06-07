@@ -20,7 +20,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
   double _boredLevel = 0.0;
 
   final GetItem _getItem = GetItem('userID');
-  int _totalLike = 0;  // 좋아요 수를 저장하는 변수
+  int _totalLike = 0; // 좋아요 수를 저장하는 변수
 
   @override
   void initState() {
@@ -52,9 +52,11 @@ class _MyPetScreenState extends State<MyPetScreen> {
   Future<void> _updateLevels() async {
     int hungryLevel = await _petStatement.getHungryLevel();
     int boredLevel = await _petStatement.getBoredLevel();
+    int totalLike = await _petStatement.getTotalLike();
     setState(() {
       _hungryLevel = hungryLevel / 100;
       _boredLevel = boredLevel / 100;
+      _totalLike = totalLike;
     });
   }
 
@@ -69,13 +71,8 @@ class _MyPetScreenState extends State<MyPetScreen> {
   }
 
   Future<void> _pressLike() async {
-    try {
-      setState(() {
-        _interactionPet.pressLike();  // 좋아요 수를 업데이트
-      });
-    } catch (e) {
-      print('Error like set state: $e');  // 구체적인 오류 메시지를 출력
-    }
+    await _interactionPet.pressLike();
+    _updateLevels();
   }
 
   @override
@@ -154,7 +151,8 @@ class _MyPetScreenState extends State<MyPetScreen> {
                     FutureBuilder<int>(
                       future: _getItem.getFoodItem(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return CircularProgressIndicator();
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
@@ -173,7 +171,8 @@ class _MyPetScreenState extends State<MyPetScreen> {
                     FutureBuilder<int>(
                       future: _getItem.getToyItem(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return CircularProgressIndicator();
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
@@ -198,7 +197,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
                     height: 30,
                   ),
                   label: Text(
-                    '$_totalLike',  // 좋아요 수를 표시
+                    '$_totalLike', // 좋아요 수를 표시
                     style: TextStyle(fontSize: 25),
                   ),
                   style: ElevatedButton.styleFrom(
