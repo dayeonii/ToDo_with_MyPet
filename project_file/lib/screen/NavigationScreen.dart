@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_pet/screen/ToDoScreen.dart';
 import 'package:todo_pet/screen/FriendScreen.dart';
 import 'package:todo_pet/screen/PetScreen.dart';
+import 'package:todo_pet/screen/LoginScreen.dart';
 
 class NavigationScreen extends StatelessWidget {
   @override
@@ -36,6 +37,13 @@ class NavigationScreen extends StatelessWidget {
                   context, MaterialPageRoute(builder: (context) => FriendScreen()));
             },
           ),
+          ListTile(
+            title: Text('Logout'),
+            onTap: () {
+              Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => LoginScreen()));
+            },
+          )
         ],
       ),
     );
