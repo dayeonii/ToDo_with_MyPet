@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
         '/todo': (context) => ToDoScreen(),
-        'mypet': (context) => MyPetScreen(),
+        'mypet': (context) => PetScreen(),
       },
     );
   }

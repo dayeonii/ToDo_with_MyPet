@@ -62,7 +62,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => MyPetScreen()),
+                MaterialPageRoute(builder: (context) => PetScreen()),
               );
             },
             child: Text('Pet'),

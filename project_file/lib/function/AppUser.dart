@@ -1,16 +1,40 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class Users {
-  final String uid;
-  final String petID;
+class AppUser {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Users({required this.uid, required this.petID});
+  late String _userID;
+  late DocumentReference _userDocRef;
 
-  factory Users.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return Users(
-      uid: doc.id, // Firebase Authentication의 UID를 문서ID로 사용
-      petID: data['petID'] ?? '',
-    );
+  // 싱글톤 인스턴스
+  static final AppUser _instance = AppUser._internal();
+
+  factory AppUser() {
+    return _instance;
+  }
+
+  AppUser._internal() {
+    _userID = _auth.currentUser!.uid;
+    _userDocRef = _firestore.collection('USER').doc(_userID);
+  }
+
+  // 현재 사용자의 UID 가져오기
+  String get userID => _userID;
+
+  // 현재 사용자의 ToDos 컬렉션 가져오기
+  CollectionReference get todosCollectionRef => _userDocRef.collection('ToDos');
+
+  // 현재 사용자의 Items 컬렉션 가져오기
+  CollectionReference get itemsCollectionRef => _userDocRef.collection('Item');
+
+  // 현재 사용자의 Pets 컬렉션 가져오기
+  CollectionReference get petsCollectionRef => _userDocRef.collection('Pet');
+
+  // 현재 사용자의 정보를 다시 불러오기
+  Future<void> reloadUser() async {
+    _userID = _auth.currentUser!.uid;
+    _userDocRef = _firestore.collection('USER').doc(_userID);
   }
 }

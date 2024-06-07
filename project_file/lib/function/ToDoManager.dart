@@ -2,33 +2,31 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_pet/function/CheckToDo.dart';
+import 'package:todo_pet/function/AppUser.dart';
 
 class ToDoManager {
-  //Firebase 정보를 가져오기 위한 인스턴스 객체
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AppUser _appUser = AppUser();
 
-  //ToDos 로컬 저장
   List<Map<String, dynamic>> todoList = [];
   double progressRate = 0.0;
 
-  //생성자
   ToDoManager() {
     _loadToDos();
   }
 
-  //현재 로그인한 사용자의 userID 가져오기
+  // 현재 로그인한 사용자의 userID 가져오기
   String getUserID() {
     return _auth.currentUser!.uid;
   }
 
-  //Firebase에 저장된 해당 사용자의 ToDos 하위 컬렉션에 접근
+  // Firebase에 저장된 해당 사용자의 ToDos 하위 컬렉션에 접근
   CollectionReference getUserToDos() {
-    String userID = getUserID();
-    return _firestore.collection('USER').doc(userID).collection('ToDos');
+    return _appUser.todosCollectionRef;
   }
 
-  //로컬 투두 리스트에 서버의 내용 불러와 저장하기
+  // 로컬 투두 리스트에 서버의 내용 불러와 저장하기
   Future<void> _loadToDos() async {
     try {
       final QuerySnapshot result = await getUserToDos().get();
@@ -96,7 +94,7 @@ class ToDoManager {
   }
 
   void checkToDo(BuildContext context, String todoId, VoidCallback onComplete) {
-    CheckToDo.showCheckToDoDialog(context, getUserID(), todoId, () async {
+    CheckToDo.showCheckToDoDialog(context, todoId, () async {
       await completeToDo(todoId);
       onComplete();
     });

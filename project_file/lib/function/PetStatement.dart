@@ -1,60 +1,95 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:todo_pet/function/AppUser.dart';
 
-class PetStatement with ChangeNotifier {
+class PetStatement {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String petID;
+  final AppUser _appUser = AppUser();
 
-  PetStatement(this.petID);
-
-  //초기값
+  // Pet 초기화
   Future<void> initPet() async {
-    DocumentReference petDoc = _firestore.collection('pet').doc(petID);
-    DocumentSnapshot docSnapshot = await petDoc.get();
-    if(!docSnapshot.exists) {
-      await petDoc.set({
-        'hungryLevel': 0,
-        'boredLevel': 0,
-        'totalLike' : 0,
-      });
+    try {
+      DocumentReference petDocRef = _appUser.petsCollectionRef.doc(_appUser.userID);
+      DocumentSnapshot petDocSnapshot = await petDocRef.get();
+
+      if (!petDocSnapshot.exists) {
+        await petDocRef.set({
+          'hungryLevel': 0,
+          'boredLevel': 0,
+          'totalLike': 0,
+        });
+      }
+    } catch (e) {
+      print('Error initializing pet: $e');
+      throw e;
     }
   }
 
-  //get
+  // 배고픔 수치 가져오기
   Future<int> getHungryLevel() async {
-    DocumentSnapshot petDoc =
-        await _firestore.collection('pet').doc(petID).get();
-    return petDoc['hungryLevel'];
+    try {
+      DocumentSnapshot petDocSnapshot = await _appUser.petsCollectionRef.doc(_appUser.userID).get();
+      return petDocSnapshot['hungryLevel'];
+    } catch (e) {
+      print('Error getting hungry level: $e');
+      throw e;
+    }
   }
 
+  // 심심함 수치 가져오기
   Future<int> getBoredLevel() async {
-    DocumentSnapshot petDoc =
-        await _firestore.collection('pet').doc(petID).get();
-    return petDoc['boredLevel'];
+    try {
+      DocumentSnapshot petDocSnapshot = await _appUser.petsCollectionRef.doc(_appUser.userID).get();
+      return petDocSnapshot['boredLevel'];
+    } catch (e) {
+      print('Error getting bored level: $e');
+      throw e;
+    }
   }
 
+  // 좋아요 수 가져오기
   Future<int> getTotalLike() async {
-    DocumentSnapshot petDoc =
-    await _firestore.collection('pet').doc(petID).get();
-    return petDoc['totalLike'] ?? 0;
+    try {
+      DocumentSnapshot petDocSnapshot = await _appUser.petsCollectionRef.doc(_appUser.userID).get();
+      return petDocSnapshot['totalLike'] ?? 0;
+    } catch (e) {
+      print('Error getting total like: $e');
+      throw e;
+    }
   }
 
-  //set
+  // 배고픔 수치 설정
   Future<void> setHungryLevel(int newValue) async {
-    await _firestore.collection('pet').doc(petID).update({
-      'hungryLevel': newValue,
-    });
+    try {
+      await _appUser.petsCollectionRef.doc(_appUser.userID).update({
+        'hungryLevel': newValue,
+      });
+    } catch (e) {
+      print('Error setting hungry level: $e');
+      throw e;
+    }
   }
 
+  // 심심함 수치 설정
   Future<void> setBoredLevel(int newValue) async {
-    await _firestore.collection('pet').doc(petID).update({
-      'boredLevel': newValue,
-    });
+    try {
+      await _appUser.petsCollectionRef.doc(_appUser.userID).update({
+        'boredLevel': newValue,
+      });
+    } catch (e) {
+      print('Error setting bored level: $e');
+      throw e;
+    }
   }
 
+  // 좋아요 수 설정
   Future<void> setTotalLike(int newValue) async {
-    await _firestore.collection('pet').doc(petID).update({
-      'totalLike': newValue,
-    });
+    try {
+      await _appUser.petsCollectionRef.doc(_appUser.userID).update({
+        'totalLike': newValue,
+      });
+    } catch (e) {
+      print('Error setting total like: $e');
+      throw e;
+    }
   }
 }

@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:todo_pet/function/AppUser.dart';
 
 class GetItem {
-  //Firebase 정보를 가져오기 위한 인스턴스 객체
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final String userID;
 
   GetItem(this.userID);
 
-  // 초기값
+  // 초기화
   Future<void> initItem() async {
     DocumentReference itemDoc = _firestore.collection('USER').doc(userID).collection('Items').doc('itemID');
     DocumentSnapshot docSnapshot = await itemDoc.get();
@@ -24,32 +23,28 @@ class GetItem {
     }
   }
 
-  // get
+  // 아이템 가져오기
   Future<int> getFoodItem() async {
-    DocumentSnapshot itemDoc =
-    await _firestore.collection('USER').doc(userID).collection('Items').doc('itemID').get();
+    DocumentSnapshot itemDoc = await _firestore.collection('USER').doc(userID).collection('Items').doc('itemID').get();
     return itemDoc['food'];
   }
 
   Future<int> getToyItem() async {
-    DocumentSnapshot itemDoc =
-    await _firestore.collection('USER').doc(userID).collection('Items').doc('itemID').get();
+    DocumentSnapshot itemDoc = await _firestore.collection('USER').doc(userID).collection('Items').doc('itemID').get();
     return itemDoc['toy'];
   }
 
   Future<bool> getFirstReceive() async {
-    DocumentSnapshot itemDoc =
-    await _firestore.collection('USER').doc(userID).collection('Items').doc('itemID').get();
+    DocumentSnapshot itemDoc = await _firestore.collection('USER').doc(userID).collection('Items').doc('itemID').get();
     return itemDoc['firstReceive'];
   }
 
   Future<bool> getSecondReceive() async {
-    DocumentSnapshot itemDoc =
-    await _firestore.collection('USER').doc(userID).collection('Items').doc('itemID').get();
+    DocumentSnapshot itemDoc = await _firestore.collection('USER').doc(userID).collection('Items').doc('itemID').get();
     return itemDoc['secondReceive'];
   }
 
-  // set
+  // 아이템 설정하기
   Future<void> setFoodItem(int newValue) async {
     await _firestore.collection('USER').doc(userID).collection('Items').doc('itemID').update({
       'food': newValue,
@@ -74,7 +69,7 @@ class GetItem {
     });
   }
 
-  // receive
+  // 투두 달성률에 따라 아이템 받기
   Future<void> receiveItem(double progressRate) async {
     bool firstReceive = await getFirstReceive();
     bool secondReceive = await getSecondReceive();
@@ -88,6 +83,7 @@ class GetItem {
     }
   }
 
+  // 아이템 업데이트
   Future<void> _updateItem(int increment) async {
     int currentFoodItem = await getFoodItem();
     int currentToyItem = await getToyItem();
@@ -98,7 +94,7 @@ class GetItem {
     });
   }
 
-  // reset receive status (for new day)
+  // 새로운 날을 위한 receive 상태 초기화
   Future<void> resetReceiveStatus() async {
     await _firestore.collection('USER').doc(userID).collection('Items').doc('itemID').update({
       'firstReceive': false,

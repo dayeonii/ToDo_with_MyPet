@@ -26,7 +26,7 @@ class NavigationScreen extends StatelessWidget {
             title: Text('My Pet'),
             onTap: () {
               Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => MyPetScreen()));
+                  context, MaterialPageRoute(builder: (context) => PetScreen()));
             },
           ),
           ListTile(

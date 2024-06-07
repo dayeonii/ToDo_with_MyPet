@@ -1,34 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:todo_pet/screen/ToDoScreen.dart';
-import 'package:todo_pet/screen/NavigationScreen.dart';
+import 'package:todo_pet/function/AppUser.dart';
 import 'package:todo_pet/function/PetStatement.dart';
 import 'package:todo_pet/function/GetItem.dart';
 import 'package:todo_pet/function/InteractionPet.dart';
-import 'package:todo_pet/function/Like.dart';
+import 'package:todo_pet/screen/ToDoScreen.dart';
+import 'package:todo_pet/screen/NavigationScreen.dart';
 
-class MyPetScreen extends StatefulWidget {
+class PetScreen extends StatefulWidget {
+  final AppUser _appUser = AppUser();
+
   @override
-  State<StatefulWidget> createState() {
-    return _MyPetScreenState();
-  }
+  _PetScreenState createState() => _PetScreenState();
 }
 
-class _MyPetScreenState extends State<MyPetScreen> {
-  final PetStatement _petStatement = PetStatement('petID');
-  late final Interactionpet _interactionPet;
+class _PetScreenState extends State<PetScreen> {
+  late final PetStatement _petStatement;
+  late final InteractionPet _interactionPet;
   double _hungryLevel = 0.0;
   double _boredLevel = 0.0;
+  int _totalLike = 0;
 
-  final GetItem _getItem = GetItem('userID');
-  int _totalLike = 0; // 좋아요 수를 저장하는 변수
+  late final GetItem _getItem;
+  late final AppUser _appUser;
+  // final GetItem _getItem = GetItem(_appUser.userID);
+  // final AppUser _appUser = AppUser();
 
   @override
   void initState() {
     super.initState();
-    _interactionPet = Interactionpet(_petStatement, _getItem);
+    _appUser = widget._appUser;
+    _getItem = GetItem(_appUser.userID);
+    _petStatement = PetStatement();
+    _interactionPet = InteractionPet(_petStatement, _getItem);
     _initializePet();
-    _initializeItem();
     _initializeLikes();
+    _initializeItem();
     _updateLevels();
   }
 
@@ -104,7 +110,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      '배고픔',
+                      'Hungry',
                       style: TextStyle(fontSize: 18),
                     ),
                     SizedBox(width: 10),
@@ -122,7 +128,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      '심심함',
+                      'Bored',
                       style: TextStyle(fontSize: 18),
                     ),
                     SizedBox(width: 10),
@@ -218,14 +224,14 @@ class _MyPetScreenState extends State<MyPetScreen> {
                   children: <Widget>[
                     OutlinedButton(
                       onPressed: _feedPet,
-                      child: Text('먹이주기', style: TextStyle(fontSize: 25)),
+                      child: Text('Feed', style: TextStyle(fontSize: 25)),
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(color: Colors.grey, width: 2)),
                     ),
                     SizedBox(width: 20),
                     OutlinedButton(
                       onPressed: _playPet,
-                      child: Text('놀아주기', style: TextStyle(fontSize: 25)),
+                      child: Text('Play', style: TextStyle(fontSize: 25)),
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(color: Colors.grey, width: 2)),
                     ),
