@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_pet/function/Friend.dart';
 
 class RequestScreen extends StatefulWidget {
   @override
@@ -8,11 +9,30 @@ class RequestScreen extends StatefulWidget {
 }
 
 class _RequestScreen extends State<StatefulWidget> {
-  final List<Map<String, String>> friends = [
-    {"name": "친구 1", "image": "assets/images/profileIcon.png"},
-    {"name": "친구 2", "image": "assets/images/profileIcon.png"},
-    {"name": "친구 3", "image": "assets/images/profileIcon.png"},
-  ];
+  final FriendRepository friendRepository = FriendRepository();
+  List<Friend> requests = [];
+
+  @override
+  void initState() {
+    super.initState();
+    requests = friendRepository.getRequests();
+  }
+
+  @override
+  void acceptRequest(Friend friend) {
+    setState(() {
+      friendRepository.acceptRequest(friend);
+      requests = friendRepository.getRequests();
+    });
+  }
+
+  @override
+  void rejectRequest(Friend friend) {
+    setState(() {
+      friendRepository.rejectRequest(friend);
+      requests = friendRepository.getRequests();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +47,26 @@ class _RequestScreen extends State<StatefulWidget> {
           Divider(),
           Expanded(
               child: ListView.builder(
-                itemCount: friends.length,
+                itemCount: requests.length,
                 itemBuilder: (context, index) {
                   return ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: AssetImage(friends[index]["image"]!),
+                      backgroundImage: AssetImage(requests[index].image),
                     ),
-                    title: Text(friends[index]["name"]!),
+                    title: Text(requests[index].name),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.circle_outlined),
+                          onPressed: () {acceptRequest(requests[index]);},
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.close),
+                          onPressed: () {rejectRequest(requests[index]);},
+                        ),
+                      ],
+                    ),
                   );
                 },
               )
