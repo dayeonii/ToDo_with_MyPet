@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todo_pet/screen/PetScreen.dart';
@@ -15,7 +16,8 @@ class ToDoScreen extends StatefulWidget {
 class _ToDoScreenState extends State<ToDoScreen> {
   final TextEditingController _todoController = TextEditingController();
   final ToDoManager _toDoManager = ToDoManager();
-  final GetItem _getItem = GetItem('userID');
+  late final GetItem _getItem;
+  late final String userID;
 
   DateTime dt = DateTime.now();
   List<String> weekdayList = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
@@ -26,6 +28,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
   @override
   void initState() {
     super.initState();
+    userID = FirebaseAuth.instance.currentUser!.uid;
+    _getItem = GetItem(userID);
     _getItem.initItem();
     _loadProgressRate();
   }
@@ -43,7 +47,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
   Future<void> _receiveItem() async {
     await _getItem.receiveItem(_progressRate);
-    await _loadProgressRate(); // Update progress and receive status
+    await _loadProgressRate();
   }
 
   @override
@@ -144,7 +148,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
         children: [
           IconButton(
             onPressed: () async {
-              _toDoManager.checkToDo(doc['id'], context, () {
+              _toDoManager.checkToDo(context, doc['id'], () {
                 setState(() {});
                 _loadProgressRate();
               });

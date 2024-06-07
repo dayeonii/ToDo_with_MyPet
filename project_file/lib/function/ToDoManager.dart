@@ -95,9 +95,9 @@ class ToDoManager {
     }
   }
 
-  void checkToDo(String id, BuildContext context, VoidCallback onComplete) {
-    CheckToDo.showCheckToDoDialog(context, id, () async {
-      await completeToDo(id);
+  void checkToDo(BuildContext context, String todoId, VoidCallback onComplete) {
+    CheckToDo.showCheckToDoDialog(context, getUserID(), todoId, () async {
+      await completeToDo(todoId);
       onComplete();
     });
   }
