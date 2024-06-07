@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_pet/screen/ToDoScreen.dart';
 import 'package:todo_pet/screen/FriendScreen.dart';
 import 'package:todo_pet/screen/PetScreen.dart';
 import 'package:todo_pet/screen/LoginScreen.dart';
+
+import '../function/AppUser.dart';
 
 class NavigationScreen extends StatelessWidget {
   @override
@@ -39,9 +42,12 @@ class NavigationScreen extends StatelessWidget {
           ),
           ListTile(
             title: Text('Logout'),
-            onTap: () {
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              AppUser _appUser = AppUser();
+              _appUser.updateUserData();
               Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                  context, MaterialPageRoute(builder: (context) => LoginScreen()));
             },
           )
         ],

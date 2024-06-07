@@ -8,7 +8,6 @@ class AppUser {
   late String _userID;
   late DocumentReference _userDocRef;
 
-  // 싱글톤 인스턴스
   static final AppUser _instance = AppUser._internal();
 
   factory AppUser() {
@@ -16,8 +15,13 @@ class AppUser {
   }
 
   AppUser._internal() {
-    _userID = _auth.currentUser!.uid;
-    _userDocRef = _firestore.collection('USER').doc(_userID);
+    if (_auth.currentUser != null) {
+      _userID = _auth.currentUser!.uid;
+      _userDocRef = _firestore.collection('USER').doc(_userID);
+    } else {
+      _userID = '';
+      _userDocRef = _firestore.collection('USER').doc(); // 빈 문서 참조
+    }
   }
 
   // 현재 사용자의 UID 가져오기
@@ -37,4 +41,17 @@ class AppUser {
     _userID = _auth.currentUser!.uid;
     _userDocRef = _firestore.collection('USER').doc(_userID);
   }
+
+  Future<void> updateUserData() async {
+    if(_auth.currentUser!=null) {
+      _userID = _auth.currentUser!.uid;
+      _userDocRef = _firestore.collection('USER').doc(_userID);
+    }
+  }
+
+  // // 사용자 정보 초기화 -> 삭제됨
+  // void clearUserData() {
+  //   _userID = '';
+  //   _userDocRef = _firestore.collection('USER').doc(); // 빈 문서 참조
+  // }
 }

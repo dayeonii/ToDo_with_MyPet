@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_pet/screen/ToDoScreen.dart';
+
+import '../function/AppUser.dart';
 // import 'package:your_app/screens/todo_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,6 +15,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AppUser _appUser = AppUser();
 
   Future<void> _login() async {
     try {
@@ -20,6 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
+      // 로그인 성공 시 사용자 데이터 갱신
+      await _appUser.updateUserData();
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => ToDoScreen()));
     } catch (e) {
