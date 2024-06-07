@@ -28,4 +28,10 @@ class Interactionpet {
     }
   }
 
+  //좋아요 버튼을 누르면 좋아요 수 1 증가
+  Future<void> pressLike() async {
+    int currentLike = await _petStatement.getTotalLike();
+    await _petStatement.setTotalLike(currentLike+1);
+  }
+
 }

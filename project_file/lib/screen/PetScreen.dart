@@ -4,6 +4,7 @@ import 'package:todo_pet/screen/NavigationScreen.dart';
 import 'package:todo_pet/function/PetStatement.dart';
 import 'package:todo_pet/function/GetItem.dart';
 import 'package:todo_pet/function/InteractionPet.dart';
+import 'package:todo_pet/function/Like.dart';
 
 class MyPetScreen extends StatefulWidget {
   @override
@@ -19,19 +20,28 @@ class _MyPetScreenState extends State<MyPetScreen> {
   double _boredLevel = 0.0;
 
   final GetItem _getItem = GetItem('userID');
+  int _totalLike = 0;  // 좋아요 수를 저장하는 변수
 
   @override
   void initState() {
     super.initState();
     _interactionPet = Interactionpet(_petStatement, _getItem);
-    // _initializePet();
-    // _initializeItem();
+    _initializePet();
+    _initializeItem();
+    _initializeLikes();
     _updateLevels();
   }
 
   Future<void> _initializePet() async {
     await _petStatement.initPet();
     _updateLevels();
+  }
+
+  Future<void> _initializeLikes() async {
+    int totalLike = await _petStatement.getTotalLike();
+    setState(() {
+      _totalLike = totalLike;
+    });
   }
 
   Future<void> _initializeItem() async {
@@ -56,6 +66,16 @@ class _MyPetScreenState extends State<MyPetScreen> {
   Future<void> _playPet() async {
     await _interactionPet.playPet();
     _updateLevels();
+  }
+
+  Future<void> _pressLike() async {
+    try {
+      setState(() {
+        _interactionPet.pressLike();  // 좋아요 수를 업데이트
+      });
+    } catch (e) {
+      print('Error like set state: $e');  // 구체적인 오류 메시지를 출력
+    }
   }
 
   @override
@@ -146,7 +166,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
                         }
                       },
                     ),
-                    SizedBox(width: 40), // 간격 조절을 위해 SizedBox 사용
+                    SizedBox(width: 40),
                     Image.asset('assets/images/toyImage.png',
                         width: 40, height: 40, fit: BoxFit.cover),
                     SizedBox(width: 15),
@@ -170,23 +190,26 @@ class _MyPetScreenState extends State<MyPetScreen> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Image.asset(
-                        'assets/images/likeIcon.png',
-                        width: 30,
-                        height: 30,
-                      ),
-                      iconSize: 30,
+                child: ElevatedButton.icon(
+                  onPressed: _pressLike,
+                  icon: Image.asset(
+                    'assets/images/likeIcon.png',
+                    width: 30,
+                    height: 30,
+                  ),
+                  label: Text(
+                    '$_totalLike',  // 좋아요 수를 표시
+                    style: TextStyle(fontSize: 25),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    shadowColor: Colors.grey,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    Text(
-                      '12',
-                      style: TextStyle(fontSize: 25),
-                    )
-                  ],
+                  ),
                 ),
               ),
               Padding(

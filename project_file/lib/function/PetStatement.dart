@@ -15,6 +15,7 @@ class PetStatement with ChangeNotifier {
       await petDoc.set({
         'hungryLevel': 0,
         'boredLevel': 0,
+        'totalLike' : 0,
       });
     }
   }
@@ -32,6 +33,12 @@ class PetStatement with ChangeNotifier {
     return petDoc['boredLevel'];
   }
 
+  Future<int> getTotalLike() async {
+    DocumentSnapshot petDoc =
+    await _firestore.collection('pet').doc(petID).get();
+    return petDoc['totalLike'] ?? 0;
+  }
+
   //set
   Future<void> setHungryLevel(int newValue) async {
     await _firestore.collection('pet').doc(petID).update({
@@ -42,6 +49,12 @@ class PetStatement with ChangeNotifier {
   Future<void> setBoredLevel(int newValue) async {
     await _firestore.collection('pet').doc(petID).update({
       'boredLevel': newValue,
+    });
+  }
+
+  Future<void> setTotalLike(int newValue) async {
+    await _firestore.collection('pet').doc(petID).update({
+      'totalLike': newValue,
     });
   }
 }
