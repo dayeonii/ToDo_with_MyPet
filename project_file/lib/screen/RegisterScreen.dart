@@ -46,7 +46,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(right: 60),
-                      child: Text('ID'),
+                      child: Text('ID (email)'),
                     ),
                     Expanded(
                       child: TextField(

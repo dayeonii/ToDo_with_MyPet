@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_pet/screen/ToDoScreen.dart';
-
-import '../function/AppUser.dart';
-// import 'package:your_app/screens/todo_screen.dart';
+import 'package:todo_pet/function/AppUser.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -18,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final AppUser _appUser = AppUser();
 
-  Future<void> _login() async {
+  Future<void> _login(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text,
@@ -29,8 +27,14 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => ToDoScreen()));
     } catch (e) {
-      print('Failed to sign in: $e');
-      // Show error message
+      // 로그인 실패 시 스낵바를 통해 메시지 표시
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('아이디/비밀번호가 틀립니다'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+      // print('Failed to sign in: $e');
     }
   }
 
@@ -55,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(right: 60),
-                      child: Text('ID'),
+                      child: Text('ID (email)'),
                     ),
                     Expanded(
                       child: TextField(
@@ -87,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: EdgeInsets.all(15),
                 child: ElevatedButton(
                   child: const Text('login'),
-                  onPressed: _login,
+                  onPressed: () => _login(context),
                 ),
               ),
               Padding(

@@ -22,8 +22,6 @@ class _PetScreenState extends State<PetScreen> {
 
   late final GetItem _getItem;
   late final AppUser _appUser;
-  // final GetItem _getItem = GetItem(_appUser.userID);
-  // final AppUser _appUser = AppUser();
 
   @override
   void initState() {
@@ -66,13 +64,13 @@ class _PetScreenState extends State<PetScreen> {
     });
   }
 
-  Future<void> _feedPet() async {
-    await _interactionPet.feedPet();
+  Future<void> _feedPet(BuildContext context) async {
+    await _interactionPet.feeding(context);
     _updateLevels();
   }
 
-  Future<void> _playPet() async {
-    await _interactionPet.playPet();
+  Future<void> _playPet(BuildContext context) async {
+    await _interactionPet.playing(context);
     _updateLevels();
   }
 
@@ -196,7 +194,7 @@ class _PetScreenState extends State<PetScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
                 child: ElevatedButton.icon(
-                  onPressed: _pressLike,
+                  onPressed: () => _pressLike(),
                   icon: Image.asset(
                     'assets/images/likeIcon.png',
                     width: 30,
@@ -223,14 +221,14 @@ class _PetScreenState extends State<PetScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     OutlinedButton(
-                      onPressed: _feedPet,
+                      onPressed: () => _feedPet(context),
                       child: Text('Feed', style: TextStyle(fontSize: 25)),
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(color: Colors.grey, width: 2)),
                     ),
                     SizedBox(width: 20),
                     OutlinedButton(
-                      onPressed: _playPet,
+                      onPressed: () => _playPet(context),
                       child: Text('Play', style: TextStyle(fontSize: 25)),
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(color: Colors.grey, width: 2)),
