@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Row(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(right: 60),
+                      padding: EdgeInsets.only(right: 30),
                       child: Text('ID (email)'),
                     ),
                     Expanded(
@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Row(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(right: 10),
+                      padding: EdgeInsets.only(right: 30),
                       child: Text('Password'),
                     ),
                     Expanded(
