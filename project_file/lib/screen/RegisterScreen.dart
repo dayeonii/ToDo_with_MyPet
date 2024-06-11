@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class _RegisterScreen extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   Future<void> _register() async {
     if (_passwordController.text != _passwordConfirmController.text) {
@@ -19,10 +21,20 @@ class _RegisterScreen extends State<RegisterScreen> {
       return;
     }
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
+
+      // Save the user name in Firestore
+      User? user = userCredential.user;
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('USER').doc(user.uid).collection('Profile').add({
+          'id': user.uid,
+          'name': _nameController.text,
+        });
+      }
+
       Navigator.pop(context);
     } catch (e) {
       print('Failed to register: $e');
@@ -86,6 +98,22 @@ class _RegisterScreen extends State<RegisterScreen> {
                       child: TextField(
                         controller: _passwordConfirmController,
                         obscureText: true,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(right: 15),
+                      child: Text('Name'),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: _nameController,
                       ),
                     ),
                   ],
