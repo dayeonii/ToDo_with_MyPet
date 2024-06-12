@@ -92,4 +92,13 @@ class PetStatement {
       throw e;
     }
   }
+
+  // 펫 생성 여부
+  Future<bool> getIsPet() async {
+    DocumentSnapshot doc = await _appUser.petsCollectionRef.doc('isPet').get();
+    if (doc.exists && doc.data() != null) {
+      return doc.get('isPet') ?? false;
+    }
+    return false;
+  }
 }

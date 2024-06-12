@@ -18,6 +18,7 @@ class AppUser {
     if (_auth.currentUser != null) {
       _userID = _auth.currentUser!.uid;
       _userDocRef = _firestore.collection('USER').doc(_userID);
+      _initializeUserDocument();
     } else {
       _userID = '';
       _userDocRef = _firestore.collection('USER').doc(); // 빈 문서 참조
@@ -42,6 +43,15 @@ class AppUser {
     _userDocRef = _firestore.collection('USER').doc(_userID);
   }
 
+  // 초기 실행 시 (회원가입 시) isPet 필드 초기화
+  Future<void> _initializeUserDocument() async {
+    DocumentSnapshot doc = await _userDocRef.get();
+    if(!doc.exists) {
+      await _userDocRef.set({'isPet':false});
+    }
+  }
+
+
   Future<void> updateUserData() async {
     if(_auth.currentUser!=null) {
       _userID = _auth.currentUser!.uid;
@@ -49,9 +59,4 @@ class AppUser {
     }
   }
 
-  // // 사용자 정보 초기화 -> 삭제됨
-  // void clearUserData() {
-  //   _userID = '';
-  //   _userDocRef = _firestore.collection('USER').doc(); // 빈 문서 참조
-  // }
 }
