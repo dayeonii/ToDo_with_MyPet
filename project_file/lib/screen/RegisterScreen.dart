@@ -17,7 +17,13 @@ class _RegisterScreen extends State<RegisterScreen> {
 
   Future<void> _register() async {
     if (_passwordController.text != _passwordConfirmController.text) {
-      // Show error: passwords do not match
+      // 두 비밀번호의 입력이 다르면 스낵바를 통해 메시지 표시
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('재입력한 비밀번호가 다릅니다.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
       return;
     }
     try {
@@ -26,7 +32,7 @@ class _RegisterScreen extends State<RegisterScreen> {
         password: _passwordController.text,
       );
 
-      // Save the user name in Firestore
+      // firestore에 사용자 정보 저장
       User? user = userCredential.user;
       if (user != null) {
         await FirebaseFirestore.instance.collection('USER').doc(user.uid).collection('Profile').add({
@@ -37,11 +43,17 @@ class _RegisterScreen extends State<RegisterScreen> {
 
       Navigator.pop(context);
     } catch (e) {
-      print('Failed to register: $e');
-      // Show error message
+      //print('Failed to register: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('회원가입에 실패했습니다'),
+          duration: Duration(seconds: 3),
+        ),
+      );
     }
   }
 
+  // 화면 구성
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +69,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                 child: Row(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(right: 60),
+                      padding: EdgeInsets.only(right: 30),
                       child: Text('ID (email)'),
                     ),
                     Expanded(
@@ -74,7 +86,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                 child: Row(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(right: 15),
+                      padding: EdgeInsets.only(right: 30),
                       child: Text('Password'),
                     ),
                     Expanded(
@@ -92,7 +104,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(right: 15),
-                      child: Text('Confirm Password'),
+                      child: Text('Confirm PW'),
                     ),
                     Expanded(
                       child: TextField(
@@ -108,7 +120,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                 child: Row(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(right: 15),
+                      padding: EdgeInsets.only(right: 50),
                       child: Text('Name'),
                     ),
                     Expanded(

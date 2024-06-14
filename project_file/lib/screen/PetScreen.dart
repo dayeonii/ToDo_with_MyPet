@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todo_pet/function/AppUser.dart';
 import 'package:todo_pet/function/PetStatement.dart';
 import 'package:todo_pet/function/GetItem.dart';
@@ -8,7 +9,8 @@ import 'package:todo_pet/screen/NavigationScreen.dart';
 import 'package:todo_pet/function/CreatePet.dart';
 
 class PetScreen extends StatefulWidget {
-  final AppUser _appUser = AppUser(); // Singleton instance
+  final AppUser _appUser = AppUser();
+  late final CreatePet _createPetInstance;
 
   @override
   _PetScreenState createState() => _PetScreenState();
@@ -25,6 +27,10 @@ class _PetScreenState extends State<PetScreen> {
   late final AppUser _appUser;
   bool _isPet = false;
 
+  // 사용자가 선택한 펫 이미지로 설정
+  String? petType;
+  String petImage = 'assets/images/dogImage.png';
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +39,26 @@ class _PetScreenState extends State<PetScreen> {
     _getItem = GetItem(_appUser.userID);
     _interactionPet = InteractionPet(_petStatement, _getItem);
     _checkPetStatus();
+    _loadPetType();
+  }
+
+  Future<void> _loadPetType() async {
+    DocumentSnapshot snapshot = await widget._appUser.petsCollectionRef.doc('petId').get();
+    setState(() {
+      petType = snapshot['type'];
+      switch (petType) {
+        case '고양이':
+          petImage = 'assets/images/catImage.png';
+          break;
+        case '햄스터':
+          petImage = 'assets/images/hamImage.png';
+          break;
+        case '강아지':
+        default:
+          petImage = 'assets/images/dogImage.png';
+          break;
+      }
+    });
   }
 
   Future<void> _checkPetStatus() async {
@@ -160,7 +186,7 @@ class _PetScreenState extends State<PetScreen> {
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(60),
-              child: Image.asset('assets/images/catImage.png'),
+              child: Image.asset(petImage),
             ),
           ),
           Padding(
@@ -258,6 +284,7 @@ class _PetScreenState extends State<PetScreen> {
     );
   }
 
+  // 펫 생성 안됐을때 화면
   Widget _buildCreatePetButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {

@@ -14,11 +14,18 @@ class CreatePet extends StatefulWidget {
 
 class _CreatePetState extends State<CreatePet> {
   final TextEditingController _petNameController = TextEditingController();
+  String _selectedPet = '강아지'; // 사용자가 선택한 펫 종류를 저장하는 변수 (기본은 강아지)
+
+  // 드롭다운에서 선택한 펫 종류를 저장하는 함수
+  void _onPetSelected(String? value) {
+    setState(() {
+      _selectedPet = value ?? '강아지';
+    });
+  }
 
   Future<void> createPet() async {
     String petName = _petNameController.text;
     if (petName.isEmpty) {
-      // 이름이 비어 있는 경우
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('펫 이름을 입력해주세요.')),
       );
@@ -28,7 +35,7 @@ class _CreatePetState extends State<CreatePet> {
     // Firestore에 펫 데이터 추가
     await widget.appUser.petsCollectionRef.doc('petId').set({
       'name': petName,
-      // 다른 필요한 필드 추가
+      'type': _selectedPet, // 선택한 펫 종류를 Firestore에 저장
     });
 
     // isPet 값을 true로 업데이트
@@ -41,6 +48,7 @@ class _CreatePetState extends State<CreatePet> {
     );
   }
 
+  // 화면 구성
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +62,18 @@ class _CreatePetState extends State<CreatePet> {
             TextField(
               controller: _petNameController,
               decoration: InputDecoration(labelText: '펫 이름'),
+            ),
+            SizedBox(height: 20),
+            DropdownButton<String>(
+              value: _selectedPet,
+              onChanged: _onPetSelected,
+              items: <String>['강아지', '고양이', '햄스터']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
             SizedBox(height: 20),
             ElevatedButton(

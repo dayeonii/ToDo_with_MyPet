@@ -38,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  // 화면 구성
   @override
   Widget build(BuildContext context) {
     return Scaffold(
